@@ -1,0 +1,5 @@
+{{ username}} wants to connect with you!
+Message:
+{{ message }}
+
+Reply to this email to get in touch with them directly or email: {{ email }}

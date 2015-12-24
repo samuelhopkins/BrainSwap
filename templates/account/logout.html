@@ -1,0 +1,16 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% block head_title %}{% trans "Log Out" %}{% endblock %}
+{% block content %}
+    <div id="account_page" class="ui middle aligned center aligned grid">
+        <div id="center_segment" class="column">
+            <form class="logout ui large form" method="POST" action="/accounts/logout/">
+            {% csrf_token %}
+            <h2>Are You sure you want to log out?</h2>
+            <div class="ui horizontal divider">
+            <button type="submit" class="ui fluid large submit button">Logout</button>
+            </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

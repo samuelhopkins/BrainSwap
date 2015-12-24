@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="ui header centered">Welcome To The BrainSwap</h2>
+  <div class="ui raised padded container ">
+    <div class="segment">
+      <div class="ui secondary pointing menu">
+        <a class="active item" data-tab="about">
+          About
+        </a>
+        <a class="item" data-tab="team">
+          Team
+        </a>
+        <a class="item" data-tab="faq">
+          FAQ
+        </a>
+      </div>
+      <div class="ui centered grid">
+        <div class="fourteen wide column">
+          <div class="ui segment padded">
+            <div class="ui tab active" data-tab="about">
+
+              <p>
+              <h4>BrainSwap is a platform for to help students connect locally for the purpose of academic collaboration. BrainSwap is not a market place for tutors, though we do not discourage development of professional tutoring relationships.
+              </h4>
+              </p>
+
+            </div>
+            <div class="ui tab" data-tab="team">
+              <h1 class="ui header">Sam Hopkins
+              <div class="sub header">Founder & Lead Engineer</div>
+              </h1>
+            </div>
+            <div class="ui tab" data-tab="faq">
+              <h2 class="ui header">Frequently asked questions</h2>
+              <div class="ui list">
+                <div class="item">
+                  <div class="ui accordion">
+                    <div class="title">
+                      <i class="dropdown icon"></i>
+                      How does this work
+                    </div>
+                    <div class="content">
+                    <h4>
+                      Simply specify in your profile subjects you would feel comfortable assisting other students with as well as subjects you need assistance with. Using this information along with your major(s) we can recommend students for you to contact. You are also able to search for students to assist you or for you to assist based on the aforementioned profile information.
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="ui accordion">
+                    <div class="title">
+                      <i class="dropdown icon"></i>
+                      Is this service anonymous
+                    </div>
+                    <div class="content">
+                    <h4>
+                      Mostly. The only explicitly public information is your user name and summary. If you decide to contact another user they will receive your email as means of contacting you back. Information like profile classes can be inferred from matches, but it is never actually disclosed.
+                      </h4>
+                    </div>
+                  </div>
+                </div>
+              <div class="item">
+                 <div class="ui accordion">
+                    <div class="title">
+                      <i class="dropdown icon"></i>
+                      Are there rules about charging money for assistance?
+                    </div>
+                    <div class="content">
+                    <h4>
+                      As stated in the about section, though BrainSwap is not necessarily a marketplace for paid tutors, we do not discourage users from establishing professional tutor relationships or otherwise.
+                      </h4>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$('.secondary.pointing.menu .item').tab();
+</script>
+{% endblock %}

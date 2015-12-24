@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1 class="ui header centered">{{ request.user.username }}'s Profile</h2>
+    <div class="ui raised padded container ">
+    <form class="ui large form" method="post">
+    {% csrf_token %}
+    <div class="ui segment">
+        {{ form.summary }}
+    </div>
+
+    <div class="ui segment stacked">
+    <div class="ui three column very  grid">
+
+        <div class="column">
+            <div class="ui pointing below label large">Your Major(s)</div>
+            {{ form.majors}}
+        </div>
+
+        <div class="column">
+             <div class="ui pointing below label large">Subjects You Can Offer Help With</div>
+            {{form.profs}}
+        </div>
+
+         <div class="column">
+         <div class="ui pointing below label large">Subjects You Need Help With</div>
+            {{form.defs}}
+        </div>
+        </div>
+        <div class="ui horizontal divider">
+        <div class="ui fluid large customblue submit button"><input type="submit"/></div>
+        </div>
+        </div>
+        </form>
+        </div>
+        <script>
+        $('.ui.dropdown').dropdown();
+    </script>
+{% endblock %}

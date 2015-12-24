@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block scripts %}
+    <script src="{% static "js/connect.js" %}" type="text/javascript"></script>
+{% endblock %}
+{% block content %}
+    <div class="ui container">
+        <h1 class="ui centered header">Recommended Contacts </h1>
+        <div class="ui segment padded">
+            {% for student in matches %}
+                <div class="ui segment padded ">
+                    <div class="ui equal width grid">
+                        <div class="column">
+                            <h3> <i class="ui circular user icon"></i>{{ student.username}}</h3>
+                        </div>
+                        <div class="column">
+                            <div value="{{student.id}}" class="ui right floated vertical animated button">
+                                <div class="hidden content">Message</div>
+                                <div class="visible content">
+                                    <i class="mail icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

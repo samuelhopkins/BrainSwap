@@ -34,7 +34,16 @@
           </a>
           <a class="header item" href="{% url 'theswap:messages' %}">
             Messages
-            <i class="circular mail icon"></i>
+            {% if user.profile.unread_messages > 0 %}
+            <i class="medium icons">
+            <i class="mail icon"></i>
+            <i class="corner icon"><div class="ui red huge header">{{ user.profile.unread_messages }}</div></i>
+            </i>
+            {% else %}
+            <i class="medium icons">
+            <i class="mail icon"></i>
+            </i>
+            {% endif %}
           </a>
         {% endif %}
         <div class="right menu">

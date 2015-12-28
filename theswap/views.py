@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from theswap.models import Profile, Major, Prof, Def
+from theswap.models import Profile, Major, Prof, Def, Message
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import ProfileForm
 from collections import defaultdict
@@ -12,8 +12,18 @@ from django.core import mail
 import json
 # Create your views here.
 
+def updateUnread(user):
+    inbox_messages = user.inbox.message_set.all()
+    unread = 0
+    for message in inbox_messages:
+        if message.read == False:
+            unread += 1
+    user.profile.unread_messages = unread
+    user.profile.save()
+
 @login_required
 def profile(request):
+    updateUnread(request.user)
     if request.method == 'POST':
         profileForm = ProfileForm(request.POST, instance= request.user.profile)
         if profileForm.is_valid():
@@ -58,38 +68,79 @@ def get_recommended(request):
 
 @login_required
 def messages(request):
-    return render(request, 'messages.html', {})
+    updateUnread(request.user)
+    outBox = request.user.outbox.message_set.all()
+    inBox = request.user.inbox.message_set.all()
+    return render(request, 'messages.html', {'inbox' : inBox, 'outbox' : outBox})
 
 @login_required
 def message(request):
     if request.method == 'POST':
-        body = str(request.POST['body'])
         print request.POST
+        body = str(request.POST['body'])
         user_id = request.POST['id']
-        subject ="New message from BrainSwap"
-        recipient = User.objects.get(id=user_id)
-        print "In message"
-        print (recipient in request.user.profile.contacts.all())
-        if recipient in request.user.profile.contacts.all():
-            context = {'success': True, 'message' : 'You have already contacted this user'}
-            return HttpResponse(json.dumps(context))
+        recipient_user = User.objects.get(id=user_id)
+        print "Message Controller"
+        message = Message.objects.create(content = body, recipient = recipient_user.inbox, recipient_name = recipient_user.username, sender = request.user.outbox, sender_name = request.user.username)
+        print "Message Controller"
+        context = {'success': True, 'message' : 'Your message has been successfully sent!'}
+        return HttpResponse(json.dumps(context))
+
+@login_required
+def deleteMessage(request):
+    if request.method == 'POST':
+        message_id = request.POST['message_id']
+        is_inbox = request.POST['inbox']
+        message = Message.objects.get(id=message_id)
+        if is_inbox == 'true':
+            print "is inbox"
+            inbox = message.recipient
+            print inbox.message_set.all()
+            message.recipient = None
+            message.save()
+            print inbox.message_set.all()
         else:
-            request.user.profile.contacts.add(recipient)
-        msg_plain = request.user.username+" would like to connect!\n\n"+body+"\n\nRespond to this email to contact them directly."
-        email = mail.EmailMessage(subject,msg_plain,'sahopkins93@gmail.com',[recipient.email], [], [recipient.email])
-        try:
-            connection = mail.get_connection()
-            connection.open()
-            connection.send_messages([email])
-            connection.close()
-            context = {'success': True, 'message' : 'Your message has been successfully sent!'}
-            return HttpResponse(json.dumps(context))
-        except:
-            context = {'success': False, 'message' : 'Error sending message'}
-            return HttpResponse(json.dumps(context))
+            inbox = message.sender
+            print inbox.message_set.all()
+            message.sender = None
+            message.save()
+
+        print "Delete"
+        print is_inbox
+        context = {'success': True, 'message' : 'Your message has been successfully deleted!'}
+        return HttpResponse(json.dumps(context))
+
+@login_required
+def readMessage(request):
+    if request.method == 'POST':
+        message_id = request.POST['message_id']
+        message = Message.objects.get(id=message_id)
+        message.read = True
+        message.save()
+        updateUnread(request.user)
+        return HttpResponse(json.dumps('read'))
+
+@login_required
+def getBoxes(request):
+    print "getBoxes"
+    if request.method == 'GET':
+        outBox = request.user.outbox.message_set.all().order_by('created').reverse()
+        inBox = request.user.inbox.message_set.all().order_by('created').reverse()
+        out_messages = []
+        in_messages = []
+        for message in inBox:
+            user_id = User.objects.get(username=message.sender_name).id
+            print message.created
+            in_messages.append({'sender' : str(message.sender_name), 'content' : message.content, 'user_id' : user_id, 'message_id' : message.id, 'created' : "".join(str(message.created).split(" ")[0]), 'read' : message.read})
+        for message in outBox:
+            user_id = User.objects.get(username=message.recipient_name).id
+            out_messages.append({'recipient' : str(message.recipient_name), 'content' : message.content, 'user_id': user_id, 'message_id' : message.id, 'created' : "".join(str(message.created).split(" ")[0])})
+        context = {'inbox' : in_messages, 'outbox' : out_messages}
+        return HttpResponse(json.dumps(context))
 
 @login_required
 def connect(request):
+    updateUnread(request.user)
     if request.method == 'GET':
         profs = Prof.objects.all()
         defs = Def.objects.all()

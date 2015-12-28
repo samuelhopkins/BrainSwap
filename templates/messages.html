@@ -1,5 +1,112 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="{% static "js/module.js" %}" type="text/javascript"></script>
+{% endblock %}
 {% block content %}
+    <div style="display:none">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    </div>
+    <div class="ui container padded" ng-show="loaded" ng-app="messageApp" ng-controller='messageController'>
+        <div class="ui grid ">
+            <div class="six wide column">
+                <div class="ui segment">
+                    <div class="ui top attached tabular menu">
+                        <a class="item active" data-tab="inbox"> Inbox</a>
+                        <a class="item" data-tab="outbox"> Outbox</a>
+                    </div>
+                    <div class="ui bottom attached tab segment active boxes" data-tab="inbox">
+                        {% verbatim %}
+                        <div ng-if="inBox.length < 1">
+                        No messages in inbox
+                        </div>
+                        <div class="ui list" ng-repeat='message in inBox track by $index'>
+                            <div class="item">
+                                <div class="ui segment mail" ng-class="{true: 'blue'}[message.read == false]">
+                                    <div class="ui equal width grid">
+                                        <div class="column">
+                                            <div class="ui medium header person">
+                                                From: {{ message.sender }}
+                                            </div>
+                                        </div>
+                                        <div class="column">
+                                            <i class="right floated check icon zoom" ng-click="deleteMessage(true, $index)"></i>
+                                        </div>
+                                    </div>
+                                    <p class="content" ng-click="populateInboxMessage($index)">
+                                        {{ message.content | limitTo:150}}{{message.content.length < 150 ? '' : '...'}}
+                                    </p>
+                                    <p>
+                                        {{  message.created }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endverbatim %}
+                </div>
+                <div class="ui bottom attached tab segment boxes " data-tab="outbox">
+                    {% verbatim %}
+                    <div ng-if="outBox.length < 1">
+                        No messages in outbox
+                        </div>
+                    <div class="ui list" ng-repeat="message in outBox track by $index">
+                        <div class="item">
+                            <div class="ui segment mail">
+                                <div class="ui equal width grid">
+                                    <div class="column">
+                                        <div class="ui medium header person">
+                                            To: {{ message.recipient }}
+                                        </div>
+                                    </div>
+                                    <div class="column">
+                                        <i class="right floated check icon zoom" ng-click="deleteMessage(false, $index)"></i>
+                                    </div>
+                                </div>
+                                <p class="content" ng-click="populateOutboxMessage($index)">
+                                    {{ message.content | limitTo:150}}{{message.content.length < 150 ? '' : '...'}}
+                                </p>
+                                <p>
+                                    {{ message.created }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endverbatim %}
+            </div>
+        </div>
+    </div>
+    <div  class="ten wide column" >
+        <div class="ui segment" id="message-body">
+            <div class="ui medium header">
+            {% verbatim %}{{ title }}{% endverbatim %}
+        </div>
+        <p>
+        {% verbatim %}{{ message }}{% endverbatim %}
+    </p>
+</div>
+<button class="ui primary button" ng-click="reply = true; newMessage = ''; closeMessageText = 'Cancel'">
+New Message
+</button>
+<div class="ui segment" id="response" ng-show="reply">
+    <div class="ui form">
+        <div class="ui equal width grid">
+            <div class="column">
+                <div class="ui small header">{% verbatim %}{{ 'To: ' + recipient_name}}{% endverbatim %}</div>
+            </div>
+            <div class="column">
+                <i class="ui right floated remove icon zoom" ng-click="reply = false; sending = false"></i>
+            </div>
+        </div>
 
+        <div class="field" >
+            <textarea ng-model="newMessage"></textarea>
+        </div>
+        <button class="ui primary button" ng-disabled='sending' ng-click="sendMessage(); sending = true">
+        <i class="ui send icon"></i>
+        </button>
+    </div>
+</div>
+</div>
+</div>
 {% endblock %}

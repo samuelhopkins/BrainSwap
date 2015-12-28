@@ -9,5 +9,8 @@ urlpatterns = [
     url(r'^accounts/connect/', views.connect, name='connect'),
     url(r'^accounts/messages',views.messages, name='messages'),
     url(r'^accounts/message', views.message),
+    url(r'^accounts/inbox', views.getBoxes),
+    url(r'^accounts/deleteMessage', views.deleteMessage),
+    url(r'^accounts/readMessage', views.readMessage),
     url(r'^$', TemplateView.as_view(template_name="index.html"))
 ]

@@ -24,7 +24,8 @@ body {
 }
 
 
-#top-menu i.circular.icon {
+#top-menu i.circular.icon,
+#top-menu i.icons {
     margin-left: 10px;
 }
 
@@ -76,4 +77,48 @@ body {
 
 #account_page .customblue:hover {
     background-color: #3e90c9;
+}
+
+/**       Message Page      **/
+#message-body{
+    max-height: 50vh;
+    overflow: scroll;
+}
+
+#results{
+    max-height: 400px;
+    overflow: scroll;
+}
+
+.boxes{
+   max-height: 500px;
+    overflow: scroll;
+}
+
+.zoom:hover{
+    color:red;
+    cursor:pointer;
+    font-size:1.5em;
+    -webkit-transition: all 0.3s ease;
+-moz-transition: all 0.3s ease;
+-o-transition: all 0.3s ease;
+-ms-transition: all 0.3s ease;
+}
+
+.zoom{
+    float:right !important;
+    font-size:1.3em;
+    -webkit-transition: all 0.3s ease;
+-moz-transition: all 0.3s ease;
+-o-transition: all 0.3s ease;
+-ms-transition: all 0.3s ease;
+}
+
+.content{
+    cursor:pointer;
+}
+
+/*       Connect Page        */
+.margined{
+    margin-top: 15px !important;
 }

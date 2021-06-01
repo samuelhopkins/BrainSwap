@@ -38,7 +38,7 @@ rsa==3.2.3
 scipy==0.16.1
 six==1.10.0
 texttable==0.8.4
-urllib3==1.12
+urllib3==1.26.5
 virtualenv==13.1.2
 Wave==0.0.2
 wcwidth==0.1.5

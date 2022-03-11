@@ -24,7 +24,7 @@ multiprocessing==2.6.2.1
 numpy==1.10.1
 oauthlib==1.0.3
 pathspec==0.3.3
-Pillow==3.0.0
+Pillow==9.0.1
 pyasn1==0.1.9
 PyAudio==0.2.9
 pyparsing==2.0.6

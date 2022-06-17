@@ -21,7 +21,7 @@ lxml==3.5.0
 matplotlib==1.5.0
 mechanize==0.2.5
 multiprocessing==2.6.2.1
-numpy==1.10.1
+numpy==1.21.0
 oauthlib==1.0.3
 pathspec==0.3.3
 Pillow==3.0.0
